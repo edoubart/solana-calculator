@@ -11,16 +11,26 @@ pub mod solana_calculator {
     use super::*;
 
     /*
-     * The context ('ctx') is the list of accounts that the function needs to
+     * The context ('context') is the list of accounts that the function needs to
      * retrieve data from the blockchain.
      */
-    pub fn create(ctx: Context<Create>, init_message: String) -> ProgramResult {
-        let calculator = &mut ctx.accounts.calculator;
+    pub fn create(context: Context<Create>, init_message: String)
+        -> ProgramResult {
+            let calculator = &mut context.accounts.calculator;
 
-        calculator.greeting = init_message;
+            calculator.greeting = init_message;
 
-        Ok(())
-    }
+            Ok(())
+        }
+
+    pub fn add(context: Context<Addition>, number_1: i64, number_2: i64)
+        -> ProgramResult {
+            let calculator = &mut context.accounts.calculator;
+
+            calculator.result = number_1 + number_2;
+
+            Ok(())
+        }
 }
 
 /***********
@@ -42,6 +52,12 @@ pub struct Create<'info> {
 
     // System Program
     pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct Addition<'info> {
+    #[account(mut)]
+    pub calculator: Account<'info, Calculator>
 }
 
 /*
