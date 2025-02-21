@@ -31,11 +31,42 @@ pub mod solana_calculator {
 
             Ok(())
         }
+
+    pub fn subtract(context: Context<Subtraction>, number_1: i64, number_2: i64)
+        -> ProgramResult {
+            let calculator = &mut context.accounts.calculator;
+
+            calculator.result = number_1 - number_2;
+
+            Ok(())
+        }
+
+    pub fn multiply(
+        context: Context<Multiplication>,
+        number_1: i64,
+        number_2: i64
+    ) -> ProgramResult {
+        let calculator = &mut context.accounts.calculator;
+
+        calculator.result = number_1 * number_2;
+
+        Ok(())
+    }
+
+    pub fn divide(context: Context<Division>, number_1: i64, number_2: i64)
+        -> ProgramResult {
+            let calculator = &mut context.accounts.calculator;
+
+            calculator.result = number_1 / number_2;
+            calculator.remainder = number_1 % number_2;
+
+            Ok(())
+        }
 }
 
-/***********
- * Structs *
- ***********/
+/**********************
+ * Structs (Contexts) *
+ **********************/
 
 /*
  * Create
@@ -56,6 +87,24 @@ pub struct Create<'info> {
 
 #[derive(Accounts)]
 pub struct Addition<'info> {
+    #[account(mut)]
+    pub calculator: Account<'info, Calculator>
+}
+
+#[derive(Accounts)]
+pub struct Subtraction<'info> {
+    #[account(mut)]
+    pub calculator: Account<'info, Calculator>
+}
+
+#[derive(Accounts)]
+pub struct Multiplication<'info> {
+    #[account(mut)]
+    pub calculator: Account<'info, Calculator>
+}
+
+#[derive(Accounts)]
+pub struct Division<'info> {
     #[account(mut)]
     pub calculator: Account<'info, Calculator>
 }
